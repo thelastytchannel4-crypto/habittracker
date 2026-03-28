@@ -3,10 +3,11 @@ import AppLayout from '@/components/layout/AppLayout';
 import { useHabitStore } from '@/store/useHabitStore';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  BarChart, Bar, Cell, PieChart, Pie, RadarChart, PolarGrid, PolarAngleAxis, Radar
+  RadarChart, PolarGrid, PolarAngleAxis, Radar
 } from 'recharts';
 import { Brain, TrendingUp, Zap, Award, AlertCircle, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const AnalyticsPage = () => {
   const { tasks, logs } = useHabitStore();
