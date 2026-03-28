@@ -8,6 +8,7 @@ import QuickCapture from '@/components/dashboard/QuickCapture';
 import { format } from 'date-fns';
 import { Sparkles, Sun, Moon, Coffee, TrendingUp, Target, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
   const { tasks, logs, profile } = useHabitStore();
