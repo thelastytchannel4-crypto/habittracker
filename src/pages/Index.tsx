@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { Sparkles, Sun, Moon, Coffee, TrendingUp, Target, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { calculateStreak } from '@/utils/habitMetrics';
 
 const Index = () => {
   const { tasks, logs, profile } = useHabitStore();
@@ -19,13 +20,14 @@ const Index = () => {
   const otherTasks = tasks.filter(t => t.timePreference !== 'morning');
 
   const completionRate = tasks.length > 0 
-    ? Math.round((todayLogs.length / tasks.length) * 100) 
+    ? Math.round((todayLogs.filter(l => l.completed).length / tasks.length) * 100) 
     : 0;
+
+  const currentStreak = calculateStreak(logs);
 
   return (
     <AppLayout>
       <div className="space-y-16 pb-24">
-        {/* Header Section */}
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="space-y-4">
             <motion.div 
@@ -40,7 +42,7 @@ const Index = () => {
               Today's <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Evolution</span>
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-xl font-medium max-w-2xl">
-              {format(new Date(), 'EEEE, MMMM do')} • You've mastered {todayLogs.length} of {tasks.length} habits today.
+              {format(new Date(), 'EEEE, MMMM do')} • You've mastered {todayLogs.filter(l => l.completed).length} of {tasks.length} habits today.
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -48,11 +50,10 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { label: 'Daily Progress', value: `${completionRate}%`, icon: TrendingUp, color: 'orange', progress: completionRate },
-            { label: 'Current Streak', value: '12 Days', icon: Flame, color: 'rose' },
+            { label: 'Current Streak', value: `${currentStreak} Days`, icon: Flame, color: 'rose' },
             { label: 'Total Growth', value: `${profile.points} XP`, icon: Sparkles, color: 'indigo' },
           ].map((stat, i) => (
             <motion.div 
@@ -86,13 +87,11 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Active Tracking & Quick Capture Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <ActiveTracking />
           <QuickCapture />
         </div>
 
-        {/* Habit Sections */}
         <div className="space-y-20">
           <section>
             <div className="flex items-center justify-between mb-10">
