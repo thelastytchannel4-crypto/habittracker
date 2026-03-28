@@ -3,6 +3,8 @@ import AppLayout from '@/components/layout/AppLayout';
 import { useHabitStore } from '@/store/useHabitStore';
 import HabitCard from '@/components/dashboard/HabitCard';
 import CreateTaskDialog from '@/components/tasks/CreateTaskDialog';
+import ActiveTracking from '@/components/dashboard/ActiveTracking';
+import QuickCapture from '@/components/dashboard/QuickCapture';
 import { format } from 'date-fns';
 import { Sparkles, Sun, Moon, Coffee, TrendingUp, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -42,6 +44,12 @@ const Index = () => {
           </div>
           <CreateTaskDialog />
         </header>
+
+        {/* Active Tracking & Quick Capture Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ActiveTracking />
+          <QuickCapture />
+        </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
