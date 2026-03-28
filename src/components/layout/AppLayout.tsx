@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ListTodo, BarChart3, User, Sparkles, Trophy } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, ListTodo, BarChart3, User, Sparkles, Trophy, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHabitStore } from '@/store/useHabitStore';
+import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { profile } = useHabitStore();
+  const { logout, user } = useAuth();
   
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
@@ -18,12 +22,17 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
   const progress = (profile.points % 500) / 500 * 100;
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/auth');
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F1A] flex flex-col-reverse md:flex-row">
       {/* Sidebar / Bottom Nav */}
       <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-4 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
         
-        {/* Logo Section - Hidden on mobile */}
+        {/* Logo Section */}
         <div className="hidden md:flex items-center gap-4 px-2">
           <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
             <Sparkles className="text-white w-7 h-7" />
@@ -34,7 +43,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
 
-        {/* Navigation - Horizontal on mobile, Vertical on desktop */}
+        {/* Navigation */}
         <nav className="flex flex-row md:flex-col justify-around md:justify-start gap-1 md:gap-3 flex-1">
           <p className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 px-5 mb-2">Menu</p>
           {navItems.map((item) => {
@@ -64,27 +73,38 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           })}
         </nav>
 
-        {/* Progress Card - Hidden on mobile */}
-        <div className="hidden md:block bg-slate-50 dark:bg-slate-800/40 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50 mt-auto">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-amber-600" />
+        {/* User & Logout - Desktop */}
+        <div className="hidden md:flex flex-col gap-4 mt-auto">
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">Level</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white">{profile.level}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">Level</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white">{profile.level}</p>
-              </div>
+              <span className="text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">{profile.points} XP</span>
             </div>
-            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">{profile.points} XP</span>
+            <div className="relative h-3 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
+              />
+            </div>
           </div>
-          <div className="relative h-3 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
-            />
-          </div>
+          
+          <Button 
+            variant="ghost" 
+            className="w-full justify-start gap-4 px-6 py-4 rounded-2xl text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="text-sm font-bold">Logout</span>
+          </Button>
         </div>
       </aside>
 
