@@ -1,117 +1,65 @@
-import { useState, useEffect } from 'react';
-import { Habit, DailySummary, AppState, UserStats, DailyLogEntry } from '../types/habit';
-import { format } from 'date-fns';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { HabitState, Task, DailyLog, UserProfile, Category } from '../types/habit';
 
-const STORAGE_KEY = 'intelligent_habit_tracker_data';
+interface HabitStore extends HabitState {
+  addTask: (task: Omit<Task, 'id' | 'points' | 'created'>) => void;
+  logTask: (date: string, log: DailyLog) => void;
+  updateProfile: (points: number) => void;
+  deleteTask: (id: string) => void;
+}
 
-const INITIAL_STATS: UserStats = {
-  points: 0,
-  level: 1,
-  experience: 0,
-  streaks: {},
-  badges: [],
+const calculatePoints = (difficulty: string, quality: number) => {
+  const base = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 25 : 50;
+  return base * (quality / 5);
 };
 
-export const useHabitStore = () => {
-  const [state, setState] = useState<AppState>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-    return {
-      habits: [],
-      dailySummaries: {},
-      stats: INITIAL_STATS,
-    };
-  });
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
-
-  const addHabit = (habit: Omit<Habit, 'id' | 'createdAt' | 'archived'>) => {
-    const newHabit: Habit = {
-      ...habit,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      archived: false,
-    };
-    setState(prev => ({
-      ...prev,
-      habits: [...prev.habits, newHabit],
-    }));
-  };
-
-  const logHabit = (date: string, log: DailyLogEntry) => {
-    setState(prev => {
-      const summaries = { ...prev.dailySummaries };
-      if (!summaries[date]) {
-        summaries[date] = {
-          date,
-          energyLevel: 3,
-          mood: 'neutral',
-          notes: '',
-          logs: [],
+export const useHabitStore = create<HabitStore>()(
+  persist(
+    (set) => ({
+      tasks: [],
+      logs: {},
+      profile: {
+        name: "Growth Seeker",
+        level: 1,
+        points: 0,
+        badges: [],
+        streak: 0,
+      },
+      addTask: (taskData) => set((state) => {
+        const newTask: Task = {
+          ...taskData,
+          id: crypto.randomUUID(),
+          points: 0,
+          created: new Date().toISOString(),
         };
-      }
-
-      const existingLogIndex = summaries[date].logs.findIndex(l => l.habitId === log.habitId);
-      const newLogs = [...summaries[date].logs];
-      
-      if (existingLogIndex >= 0) {
-        newLogs[existingLogIndex] = log;
-      } else {
-        newLogs.push(log);
-      }
-
-      summaries[date] = { ...summaries[date], logs: newLogs };
-
-      // Calculate points
-      let pointsEarned = 10; // Base points
-      if (log.completed) {
-        const habit = prev.habits.find(h => h.id === log.habitId);
-        if (habit) {
-          if (habit.difficulty === 'medium') pointsEarned += 10;
-          if (habit.difficulty === 'hard') pointsEarned += 20;
-          pointsEarned += (log.quality || 3) * 2;
-        }
-      }
-
-      const newExperience = prev.stats.experience + pointsEarned;
-      const newLevel = Math.floor(newExperience / 1000) + 1;
-
-      return {
-        ...prev,
-        dailySummaries: summaries,
-        stats: {
-          ...prev.stats,
-          points: prev.stats.points + pointsEarned,
-          experience: newExperience,
-          level: newLevel,
-        }
-      };
-    });
-  };
-
-  const updateDailySummary = (date: string, updates: Partial<DailySummary>) => {
-    setState(prev => {
-      const summaries = { ...prev.dailySummaries };
-      if (!summaries[date]) {
-        summaries[date] = {
-          date,
-          energyLevel: 3,
-          mood: 'neutral',
-          notes: '',
-          logs: [],
+        return { tasks: [...state.tasks, newTask] };
+      }),
+      deleteTask: (id) => set((state) => ({
+        tasks: state.tasks.filter(t => t.id !== id)
+      })),
+      logTask: (date, log) => set((state) => {
+        const currentLogs = state.logs[date] || [];
+        const task = state.tasks.find(t => t.id === log.taskId);
+        const pointsEarned = task ? calculatePoints(task.difficulty, log.completionQuality) : 0;
+        
+        const newLogs = [...currentLogs.filter(l => l.taskId !== log.taskId), log];
+        
+        return {
+          logs: { ...state.logs, [date]: newLogs },
+          profile: {
+            ...state.profile,
+            points: state.profile.points + pointsEarned,
+            level: Math.floor((state.profile.points + pointsEarned) / 500) + 1
+          }
         };
-      }
-      summaries[date] = { ...summaries[date], ...updates };
-      return { ...prev, dailySummaries: summaries };
-    });
-  };
-
-  return {
-    ...state,
-    addHabit,
-    logHabit,
-    updateDailySummary,
-  };
-};
+      }),
+      updateProfile: (points) => set((state) => ({
+        profile: { ...state.profile, points: state.profile.points + points }
+      })),
+    }),
+    {
+      name: 'habit-storage',
+    }
+  )
+);

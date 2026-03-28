@@ -1,58 +1,44 @@
-export type HabitCategory = 'Health' | 'Career' | 'Learning' | 'Relationships' | 'Finance' | 'Creativity' | 'Mindfulness';
+export type Category = 'Health' | 'Career' | 'Learning' | 'Relationships' | 'Finance' | 'Creativity' | 'Mindfulness';
 
-export type HabitType = 'binary' | 'quantifiable' | 'timed' | 'incremental';
+export type TaskType = 'binary' | 'quantifiable' | 'timed' | 'incremental';
 
-export type Difficulty = 'easy' | 'medium' | 'hard';
-
-export interface Habit {
+export interface Task {
   id: string;
   name: string;
   description: string;
-  category: HabitCategory;
+  category: Category;
   icon: string;
-  type: HabitType;
+  type: TaskType;
   targetValue?: number;
-  unit?: string;
   frequency: 'daily' | 'weekly' | 'custom';
-  daysOfWeek?: number[]; // 0-6
-  timePreference: 'morning' | 'afternoon' | 'evening' | 'anytime';
-  difficulty: Difficulty;
+  timePreference: 'morning' | 'afternoon' | 'evening';
+  difficulty: 'easy' | 'medium' | 'hard';
   whyItMatters: string;
   linkedGoal?: string;
-  dependencies?: string[];
-  createdAt: string;
-  archived: boolean;
+  points: number;
+  created: string;
 }
 
-export interface DailyLogEntry {
-  habitId: string;
+export interface DailyLog {
+  taskId: string;
   completed: boolean;
-  value?: number; // for quantifiable/timed
-  quality: number; // 1-5
-  focusTime?: number; // minutes
+  completionQuality: number; // 1-5
+  focusTime: number; // minutes
   timestamp: string;
   notes?: string;
-  obstacles?: string[];
+  energyLevel?: number;
 }
 
-export interface DailySummary {
-  date: string;
-  energyLevel: number; // 1-5
-  mood: string;
-  notes: string;
-  logs: DailyLogEntry[];
-}
-
-export interface UserStats {
-  points: number;
+export interface UserProfile {
+  name: string;
   level: number;
-  experience: number;
-  streaks: Record<string, number>;
+  points: number;
   badges: string[];
+  streak: number;
 }
 
-export interface AppState {
-  habits: Habit[];
-  dailySummaries: Record<string, DailySummary>;
-  stats: UserStats;
+export interface HabitState {
+  tasks: Task[];
+  logs: Record<string, DailyLog[]>; // date string key: "YYYY-MM-DD"
+  profile: UserProfile;
 }
