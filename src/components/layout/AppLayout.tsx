@@ -19,11 +19,12 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const progress = (profile.points % 500) / 500 * 100;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F1A] flex flex-col md:flex-row">
-      {/* Sidebar - Strictly Vertical */}
-      <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-r border-slate-200/60 dark:border-slate-800/60 p-8 flex flex-col gap-12 z-20 md:sticky md:top-0 md:h-screen">
-        {/* Logo Section */}
-        <div className="flex items-center gap-4 px-2">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F1A] flex flex-col-reverse md:flex-row">
+      {/* Sidebar / Bottom Nav */}
+      <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-6 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
+        
+        {/* Logo Section - Hidden on mobile bottom nav to save space */}
+        <div className="hidden md:flex items-center gap-4 px-2">
           <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
             <Sparkles className="text-white w-7 h-7" />
           </div>
@@ -33,9 +34,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
 
-        {/* Navigation - Vertical Column */}
-        <nav className="flex flex-col gap-3 flex-1">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 px-5 mb-2">Menu</p>
+        {/* Navigation - Strictly Vertical Column */}
+        <nav className="flex flex-col gap-2 md:gap-3 flex-1">
+          <p className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 px-5 mb-2">Menu</p>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -43,9 +44,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "relative flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group overflow-hidden",
+                  "relative flex items-center gap-4 px-5 py-3.5 md:px-6 md:py-4 rounded-2xl transition-all duration-300 group overflow-hidden",
                   isActive 
-                    ? "text-indigo-600 dark:text-indigo-400 font-bold shadow-sm" 
+                    ? "text-indigo-600 dark:text-indigo-400 font-bold" 
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 )}
               >
@@ -63,8 +64,8 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           })}
         </nav>
 
-        {/* Progress Card */}
-        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50 mt-auto">
+        {/* Progress Card - Hidden on mobile bottom nav to save space */}
+        <div className="hidden md:block bg-slate-50 dark:bg-slate-800/40 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50 mt-auto">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
@@ -84,9 +85,6 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
             />
           </div>
-          <p className="text-[10px] font-bold text-slate-400 mt-4 text-center uppercase tracking-widest">
-            {500 - (profile.points % 500)} XP to next level
-          </p>
         </div>
       </aside>
 
