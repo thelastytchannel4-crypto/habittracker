@@ -21,9 +21,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F1A] flex flex-col-reverse md:flex-row">
       {/* Sidebar / Bottom Nav */}
-      <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-6 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
+      <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-4 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
         
-        {/* Logo Section - Hidden on mobile bottom nav to save space */}
+        {/* Logo Section - Hidden on mobile */}
         <div className="hidden md:flex items-center gap-4 px-2">
           <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
             <Sparkles className="text-white w-7 h-7" />
@@ -34,8 +34,8 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
 
-        {/* Navigation - Strictly Vertical Column */}
-        <nav className="flex flex-col gap-2 md:gap-3 flex-1">
+        {/* Navigation - Horizontal on mobile, Vertical on desktop */}
+        <nav className="flex flex-row md:flex-col justify-around md:justify-start gap-1 md:gap-3 flex-1">
           <p className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 px-5 mb-2">Menu</p>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -44,7 +44,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "relative flex items-center gap-4 px-5 py-3.5 md:px-6 md:py-4 rounded-2xl transition-all duration-300 group overflow-hidden",
+                  "relative flex flex-col md:flex-row items-center gap-1 md:gap-4 px-3 py-2 md:px-6 md:py-4 rounded-2xl transition-all duration-300 group overflow-hidden flex-1 md:flex-none",
                   isActive 
                     ? "text-indigo-600 dark:text-indigo-400 font-bold" 
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50"
@@ -58,13 +58,13 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
                   />
                 )}
                 <item.icon className={cn("w-5 h-5 transition-transform duration-300 group-hover:scale-110", isActive ? "text-indigo-600" : "text-slate-400")} />
-                <span className="text-sm tracking-wide">{item.label}</span>
+                <span className="text-[10px] md:text-sm tracking-wide">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Progress Card - Hidden on mobile bottom nav to save space */}
+        {/* Progress Card - Hidden on mobile */}
         <div className="hidden md:block bg-slate-50 dark:bg-slate-800/40 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50 mt-auto">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
