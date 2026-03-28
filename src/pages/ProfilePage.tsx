@@ -4,6 +4,7 @@ import { useHabitStore } from '@/store/useHabitStore';
 import { Award, Trophy, Zap, Star, Shield, Flame, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 const ProfilePage = () => {
   const { profile } = useHabitStore();
