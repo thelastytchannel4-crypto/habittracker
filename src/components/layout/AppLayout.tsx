@@ -6,12 +6,13 @@ import { useHabitStore } from '@/store/useHabitStore';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { profile } = useHabitStore();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
@@ -33,11 +34,17 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-4 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
         
         {/* Branding Section */}
-        <div className="hidden md:flex items-center gap-4 px-2">
+        <div className="hidden md:flex items-center justify-between px-2">
           <div>
             <span className="font-black text-2xl tracking-tight text-slate-900 dark:text-white block leading-none">Growth</span>
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500">Habit</span>
           </div>
+          <ThemeToggle />
+        </div>
+
+        {/* Mobile Theme Toggle (Visible only on mobile) */}
+        <div className="md:hidden absolute top-4 right-4">
+          <ThemeToggle />
         </div>
 
         {/* Navigation */}
