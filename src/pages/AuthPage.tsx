@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, LogIn, UserPlus } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { LogIn, UserPlus } from 'lucide-react';
 import { showError, showSuccess } from '@/utils/toast';
 
 const AuthPage = () => {
@@ -39,12 +39,9 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0B0F1A] p-4">
       <Card className="w-full max-w-md rounded-[2.5rem] border-none shadow-2xl shadow-indigo-100 dark:shadow-none overflow-hidden">
-        <div className="bg-indigo-600 p-8 text-white text-center">
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-            <Sparkles className="w-8 h-8" />
-          </div>
-          <h1 className="text-2xl font-black tracking-tight">Growth Habit</h1>
-          <p className="text-indigo-100 text-sm mt-1">Your journey to mastery starts here.</p>
+        <div className="bg-indigo-600 p-10 text-white text-center">
+          <h1 className="text-3xl font-black tracking-tight">Growth Habit</h1>
+          <p className="text-indigo-100 text-sm mt-2">Your journey to mastery starts here.</p>
         </div>
         
         <CardContent className="p-8">

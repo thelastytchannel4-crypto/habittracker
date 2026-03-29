@@ -6,7 +6,7 @@ import CreateTaskDialog from '@/components/tasks/CreateTaskDialog';
 import ActiveTracking from '@/components/dashboard/ActiveTracking';
 import QuickCapture from '@/components/dashboard/QuickCapture';
 import { format } from 'date-fns';
-import { Sparkles, Sun, Moon, Coffee, TrendingUp, Target, Flame } from 'lucide-react';
+import { Sun, Moon, Coffee, TrendingUp, Target, Flame, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { calculateStreak } from '@/utils/habitMetrics';
@@ -35,7 +35,6 @@ const Index = () => {
               animate={{ opacity: 1, x: 0 }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-xs font-black uppercase tracking-widest"
             >
-              <Sparkles className="w-4 h-4" />
               <span>Welcome back, {profile.name}</span>
             </motion.div>
             <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">

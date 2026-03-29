@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ListTodo, BarChart3, User, Sparkles, Trophy, LogOut } from 'lucide-react';
+import { LayoutDashboard, ListTodo, BarChart3, User, Trophy, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHabitStore } from '@/store/useHabitStore';
 import { useAuth } from '@/context/AuthContext';
@@ -32,11 +32,8 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar / Bottom Nav */}
       <aside className="w-full md:w-80 bg-white dark:bg-[#111827] border-t md:border-t-0 md:border-r border-slate-200/60 dark:border-slate-800/60 p-4 md:p-8 flex flex-col gap-6 md:gap-12 z-20 md:sticky md:top-0 md:h-screen shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-none">
         
-        {/* Logo Section */}
+        {/* Branding Section */}
         <div className="hidden md:flex items-center gap-4 px-2">
-          <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none">
-            <Sparkles className="text-white w-7 h-7" />
-          </div>
           <div>
             <span className="font-black text-2xl tracking-tight text-slate-900 dark:text-white block leading-none">Growth</span>
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500">Habit</span>
