@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { account } from '@/lib/appwrite';
-import { ID } from 'appwrite';
+import { ID, AppwriteException } from 'appwrite';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { LogIn, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus, AlertCircle } from 'lucide-react';
 import { showError, showSuccess } from '@/utils/toast';
 
 const AuthPage = () => {
@@ -15,11 +15,13 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { checkUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (isLogin) {
         await account.createEmailPasswordSession(email, password);
@@ -32,7 +34,24 @@ const AuthPage = () => {
       await checkUser();
       navigate('/');
     } catch (error: any) {
-      showError(error.message || "Authentication failed");
+      console.error("Auth Error Details:", error);
+      
+      if (error instanceof AppwriteException) {
+        // Handle specific Appwrite errors
+        if (error.type === 'user_already_exists') {
+          showError("An account with this email already exists.");
+        } else if (error.type === 'user_invalid_credentials') {
+          showError("Invalid email or password. Please try again.");
+        } else {
+          showError(error.message || "Authentication failed");
+        }
+      } else if (error.message === 'Failed to fetch') {
+        showError("Connection failed. Please ensure your domain is added to Appwrite Platforms.");
+      } else {
+        showError("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,6 +75,7 @@ const AuthPage = () => {
                   onChange={(e) => setName(e.target.value)} 
                   required 
                   className="rounded-xl"
+                  disabled={isLoading}
                 />
               </div>
             )}
@@ -69,6 +89,7 @@ const AuthPage = () => {
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
                 className="rounded-xl"
+                disabled={isLoading}
               />
             </div>
             <div className="space-y-2">
@@ -80,11 +101,18 @@ const AuthPage = () => {
                 onChange={(e) => setPassword(e.target.value)} 
                 required 
                 className="rounded-xl"
+                disabled={isLoading}
               />
             </div>
             
-            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-6 font-bold text-lg">
-              {isLogin ? <><LogIn className="w-5 h-5 mr-2" /> Sign In</> : <><UserPlus className="w-5 h-5 mr-2" /> Create Account</>}
+            <Button 
+              type="submit" 
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-6 font-bold text-lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Processing..." : (
+                isLogin ? <><LogIn className="w-5 h-5 mr-2" /> Sign In</> : <><UserPlus className="w-5 h-5 mr-2" /> Create Account</>
+              )}
             </Button>
           </form>
           
@@ -92,6 +120,7 @@ const AuthPage = () => {
             <button 
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm font-bold text-indigo-600 hover:text-indigo-700"
+              disabled={isLoading}
             >
               {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
             </button>
