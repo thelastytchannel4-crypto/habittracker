@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { Mic, MicOff, Smile, MessageSquare, Send, Sparkles } from 'lucide-react';
+import { Mic, MicOff, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -39,9 +39,6 @@ const QuickCapture = () => {
   return (
     <div className="bg-white dark:bg-slate-900 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-sm">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-pink-50 text-pink-500 rounded-xl flex items-center justify-center">
-          <Sparkles className="w-5 h-5" />
-        </div>
         <div>
           <h3 className="font-bold text-slate-900 dark:text-white">Quick Capture</h3>
           <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Mood & Voice Notes</p>

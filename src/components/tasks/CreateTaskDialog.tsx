@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Sparkles } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useHabitStore } from '@/store/useHabitStore';
 import { Category, TaskType } from '@/types/habit';
 
@@ -42,8 +42,7 @@ const CreateTaskDialog = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] rounded-3xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-indigo-600" />
+          <DialogTitle className="text-2xl font-bold">
             Design Your Growth
           </DialogTitle>
         </DialogHeader>
