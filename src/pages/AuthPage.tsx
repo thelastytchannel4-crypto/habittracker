@@ -43,7 +43,7 @@ const AuthPage = () => {
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
             <Sparkles className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight">Growth Architect AI</h1>
+          <h1 className="text-2xl font-black tracking-tight">Growth Habit</h1>
           <p className="text-indigo-100 text-sm mt-1">Your journey to mastery starts here.</p>
         </div>
         

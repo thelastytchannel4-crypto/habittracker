@@ -39,7 +39,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div>
             <span className="font-black text-2xl tracking-tight text-slate-900 dark:text-white block leading-none">Growth</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500">Architect AI</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500">Habit</span>
           </div>
         </div>
 
